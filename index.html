@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>الصفحة الرئيسية</title>
+</head>
+<body>
+
+<div class="movies">
+    <div class="movie" onclick="playMovie('https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/arriadia/hls_snrt/arriadia-avc1_1000000=3-mp4a_130400_qad=1.m3u8', 'عنوان الفيلم الأول', 'وصف الفيلم الأول')"> <!-- تحديد معلومات الفيلم الأول -->
+        <h2>فيلم 1</h2>
+        <img src="movie1.jpg" alt="فيلم 1">
+    </div>
+    <div class="movie" onclick="playMovie('رابط_الفيلم_الثاني', 'عنوان الفيلم الثاني', 'وصف الفيلم الثاني')"> <!-- تحديد معلومات الفيلم الثاني -->
+        <h2>فيلم 2</h2>
+        <img src="movie2.jpg" alt="فيلم 2">
+    </div>
+</div>
+
+<script>
+    function playMovie(url, title, description) {
+        // تشغيل الفيلم في الصفحة التالية مع تمرير متغيرات الفيلم
+        window.location.href = 'movie.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title) + '&description=' + encodeURIComponent(description);
+    }
+</script>
+
+</body>
+</html>
