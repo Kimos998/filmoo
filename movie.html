@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>الصفحة الرئيسية</title>
-    <script>
-        function playMovie(url, title, description) {
-            sessionStorage.setItem('movieUrl', url);
-            sessionStorage.setItem('movieTitle', title);
-            sessionStorage.setItem('movieDescription', description);
-            window.location.href = 'movie.html';
-        }
-    </script>
+    <title>تشغيل الفيلم</title>
 </head>
 <body>
 
-<div class="movies">
-    <div class="movie" onclick="playMovie('https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/arriadia/hls_snrt/arriadia-avc1_1000000=3-mp4a_130400_qad=1.m3u8', 'عنوان الفيلم الأول', 'وصف الفيلم الأول')"> <!-- تحديد معلومات الفيلم الأول -->
-        <h2>فيلم 1</h2>
-        <img src="movie1.jpg" alt="فيلم 1">
-    </div>
-    <div class="movie" onclick="playMovie('رابط_الفيلم_الثاني', 'عنوان الفيلم الثاني', 'وصف الفيلم الثاني')"> <!-- تحديد معلومات الفيلم الثاني -->
-        <h2>فيلم 2</h2>
-        <img src="movie2.jpg" alt="فيلم 2">
-    </div>
+<div class="maindiv">
+    <h1 id="videoTitle">عنوان الفيلم</h1>
+    <p id="videoDescription">وصف الفيلم</p>
+    
+    <video id='myVideo'  class="video-js vjs-default-skin" width="400" height="300" controls>
+        <!-- متغيرات الفيلم -->
+        <source type="application/x-mpegURL" id="videoSource" />
+    </video>
 </div>
+
+<script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
+<script src="https://vjs.zencdn.net/7.2.3/video.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // استخراج متغيرات الفيلم من الذاكرة المؤقتة
+        var videoUrl = sessionStorage.getItem('movieUrl');
+        var videoTitle = sessionStorage.getItem('movieTitle');
+        var videoDescription = sessionStorage.getItem('movieDescription');
+
+        // تحديث محتوى الصفحة بمتغيرات الفيلم
+        document.getElementById("videoTitle").innerText = videoTitle;
+        document.getElementById("videoDescription").innerText = videoDescription;
+        document.getElementById("videoSource").setAttribute("src", videoUrl);
+
+        // تحديث شريط العنوان بعنوان الفيلم
+        document.title = videoTitle;
+
+        // تشغيل الفيديو
+        var player = videojs('myVideo');
+        player.play();
+    });
+</script>
 
 </body>
 </html>
