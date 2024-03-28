@@ -1,27 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>الصفحة الرئيسية</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies</title>
+  <style>
+    .movie {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .movie img {
+      max-width: 100px;
+    }
+  </style>
 </head>
 <body>
+  <div id="movies"></div>
 
-<div class="movies">
-    <div class="movie" onclick="playMovie('https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/arriadia/hls_snrt/arriadia-avc1_1000000=3-mp4a_130400_qad=1.m3u8', 'عنوان الفيلم الأول', 'وصف الفيلم الأول')"> <!-- تحديد معلومات الفيلم الأول -->
-        <h2>فيلم 1</h2>
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBti-ercmLyDVZjwBBcmSSZ5PPv4ezI17j4G53JbHhg36U3-KRkNA0G88m8AhAiYu7bsFPouI7IJ-s5LSDYJKkT8mDyxVxzNrgDDqqKF98YsrrunqHyDA3jcO1ovE3LP1ZaAt_9I328PXD6-0emexozm2wE6MxA_lU-E0yJfwwBzH47bQdr6KWvxF9jyNM/s320/onesheet.jpg" alt="فيلم 1">
-    </div>
-    <div class="movie" onclick="playMovie('https://cdnamd-hls-globecast.akamaized.net/live/ramdisk/arriadia/hls_snrt/arriadia-avc1_1000000=3-mp4a_130400_qad=1.m3u8', 'عنوان الفيلم الثاني', 'وصف الفيلم')"> <!-- تحديد معلومات الفيلم الثاني -->
-        <h2>فيلم 2</h2>
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBti-ercmLyDVZjwBBcmSSZ5PPv4ezI17j4G53JbHhg36U3-KRkNA0G88m8AhAiYu7bsFPouI7IJ-s5LSDYJKkT8mDyxVxzNrgDDqqKF98YsrrunqHyDA3jcO1ovE3LP1ZaAt_9I328PXD6-0emexozm2wE6MxA_lU-E0yJfwwBzH47bQdr6KWvxF9jyNM/s320/onesheet.jpg" alt="فيلم 2">
-    </div>
-</div>
+  <script>
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        const movies = data.values.slice(1); // Exclude header row
+        const moviesContainer = document.getElementById('movies');
 
-<script>
-    function playMovie(url, title, description) {
-        // تشغيل الفيلم في الصفحة التالية مع تمرير متغيرات الفيلم
-        window.location.href = 'movie.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title) + '&description=' + encodeURIComponent(description);
-    }
-</script>
+        movies.forEach(movie => {
+          const [id, name, description, url, category] = movie;
 
+          const movieDiv = document.createElement('div');
+          movieDiv.classList.add('movie');
+
+          const heading = document.createElement('h3');
+          heading.textContent = name;
+          movieDiv.appendChild(heading);
+
+          const image = document.createElement('img');
+          image.src = `https://example.com/${id}.jpg`; // Replace example.com with your image source
+          movieDiv.appendChild(image);
+
+          const link = document.createElement('a');
+          link.href = `movie.html?id=${id}`;
+          link.textContent = 'Watch';
+          movieDiv.appendChild(link);
+
+          moviesContainer.appendChild(movieDiv);
+        });
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  </script>
 </body>
 </html>
