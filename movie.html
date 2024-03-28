@@ -32,7 +32,10 @@
         document.getElementById("videoDescription").innerText = videoDescription;
         document.getElementById("videoSource").setAttribute("src", videoUrl);
 
-        // تحديث مشغل الفيديو
+        // تحديث شريط العناوين بعنوان الفيلم
+        document.title = videoTitle;
+
+        // تشغيل الفيديو
         var player = videojs('myVideo');
         player.play();
     });
