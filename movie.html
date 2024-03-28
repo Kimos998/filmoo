@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>تشغيل الفيلم</title>
+</head>
+<body>
+
+<div class="maindiv">
+    <h1 id="videoTitle">عنوان الفيلم</h1>
+    <p id="videoDescription">وصف الفيلم</p>
+    
+    <video id='myVideo'  class="video-js vjs-default-skin" width="400" height="300" controls>
+        <!-- متغيرات الفيلم -->
+        <source type="application/x-mpegURL" id="videoSource" />
+    </video>
+</div>
+
+<script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
+<script src="https://vjs.zencdn.net/7.2.3/video.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // استخراج متغيرات الفيلم من عنوان الصفحة
+        var params = (new URL(document.location)).searchParams;
+        var videoUrl = params.get("url");
+        var videoTitle = decodeURIComponent(params.get("title"));
+        var videoDescription = decodeURIComponent(params.get("description"));
+
+        // تحديث محتوى الصفحة بمتغيرات الفيلم
+        document.getElementById("videoTitle").innerText = videoTitle;
+        document.getElementById("videoDescription").innerText = videoDescription;
+        document.getElementById("videoSource").setAttribute("src", videoUrl);
+
+        // تحديث مشغل الفيديو
+        var player = videojs('myVideo');
+        player.play();
+    });
+</script>
+
+</body>
+</html>
