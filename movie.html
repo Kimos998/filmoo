@@ -1,65 +1,54 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تشغيل الفيلم</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
-        #videoContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #videoTitle {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        #videoPlayer {
-            width: 480px;
-            height: 270px;
-            margin-bottom: 20px;
-        }
-        #videoDescription {
-            font-size: 18px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
 </head>
 <body>
+  <div id="movie-details"></div>
 
-<div id="videoContainer">
-    <h1 id="videoTitle">عنوان الفيديو</h1>
-    <video id="videoPlayer" controls>
-        <!-- تمرير مصدر الفيديو من الصفحة الرئيسية -->
-        <source type="video/mp4" id="videoSource">
-        Your browser does not support the video tag.
-    </video>
-    <p id="videoDescription">وصف الفيديو</p>
-</div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get('id');
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // استخراج متغيرات الفيلم من الذاكرة المؤقتة
-        var params = (new URL(document.location)).searchParams;
-        var videoUrl = params.get("url");
-        var videoTitle = decodeURIComponent(params.get("title"));
-        var videoDescription = decodeURIComponent(params.get("description"));
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        const movies = data.values.slice(1); // Exclude header row
+        const movie = movies.find(movie => movie[0] === movieId);
 
-        // تحديث محتوى الصفحة بمتغيرات الفيلم
-        document.getElementById("videoTitle").innerText = videoTitle;
-        document.getElementById("videoDescription").innerText = videoDescription;
-        document.getElementById("videoSource").setAttribute("src", videoUrl);
+        if (movie) {
+          const [id, name, description, url, category] = movie;
 
-        // تشغيل الفيديو
-        var player = document.getElementById('videoPlayer');
-        player.load();
-        player.play();
-    });
-</script>
+          const movieDetailsContainer = document.getElementById('movie-details');
 
+          const heading = document.createElement('h2');
+          heading.textContent = name;
+          movieDetailsContainer.appendChild(heading);
+
+          const descriptionPara = document.createElement('p');
+          descriptionPara.textContent = description;
+          movieDetailsContainer.appendChild(descriptionPara);
+
+          const categoryPara = document.createElement('p');
+          categoryPara.textContent = `Category: ${category}`;
+          movieDetailsContainer.appendChild(categoryPara);
+
+          const video = document.createElement('video');
+          video.controls = true;
+          const source = document.createElement('source');
+          source.src = url;
+          source.type = 'video/mp4'; // Change the type if your video is in a different format
+          video.appendChild(source);
+          movieDetailsContainer.appendChild(video);
+        } else {
+          const errorPara = document.createElement('p');
+          errorPara.textContent = 'Movie not found';
+          document.body.appendChild(errorPara);
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  </script>
 </body>
 </html>
