@@ -1,41 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تشغيل الفيلم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #videoContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #videoTitle {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        #videoPlayer {
+            width: 480px;
+            height: 270px;
+            margin-bottom: 20px;
+        }
+        #videoDescription {
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="maindiv">
-    <h1 id="videoTitle">عنوان الفيلم</h1>
-    <p id="videoDescription">وصف الفيلم</p>
-    
-    <video id='myVideo'  class="video-js vjs-default-skin" width="400" height="300" controls>
-        <!-- متغيرات الفيلم -->
-        <source type="application/x-mpegURL" id="videoSource" />
+<div id="videoContainer">
+    <h1 id="videoTitle">عنوان الفيديو</h1>
+    <video id="videoPlayer" controls>
+        <!-- تمرير مصدر الفيديو من الصفحة الرئيسية -->
+        <source type="video/mp4" id="videoSource">
+        Your browser does not support the video tag.
     </video>
+    <p id="videoDescription">وصف الفيديو</p>
 </div>
-
-<script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
-<script src="https://vjs.zencdn.net/7.2.3/video.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // استخراج متغيرات الفيلم من الذاكرة المؤقتة
-        var videoUrl = sessionStorage.getItem('movieUrl');
-        var videoTitle = sessionStorage.getItem('movieTitle');
-        var videoDescription = sessionStorage.getItem('movieDescription');
+        var params = (new URL(document.location)).searchParams;
+        var videoUrl = params.get("url");
+        var videoTitle = decodeURIComponent(params.get("title"));
+        var videoDescription = decodeURIComponent(params.get("description"));
 
         // تحديث محتوى الصفحة بمتغيرات الفيلم
         document.getElementById("videoTitle").innerText = videoTitle;
         document.getElementById("videoDescription").innerText = videoDescription;
         document.getElementById("videoSource").setAttribute("src", videoUrl);
 
-        // تحديث شريط العنوان بعنوان الفيلم
-        document.title = videoTitle;
-
         // تشغيل الفيديو
-        var player = videojs('myVideo');
+        var player = document.getElementById('videoPlayer');
+        player.load();
         player.play();
     });
 </script>
